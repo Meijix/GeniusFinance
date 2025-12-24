@@ -1,0 +1,7 @@
+{
+  "name": "FinanzasGenius AI",
+  "description": "Una herramienta inteligente para el seguimiento de finanzas personales y suscripciones, potenciada por Gemini para obtener insights de ahorro.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
