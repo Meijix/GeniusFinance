@@ -226,8 +226,8 @@ export const DebtsView: React.FC<DebtsViewProps> = ({
                     className={`h-full ${debt.color.replace('200', '400')} transition-all duration-1000 relative border-r-4 border-white/50`}
                     style={{ width: `${progress}%` }}
                   >
-                     {/* Marker texture */}
-                     <div className="absolute inset-0 bg-white opacity-20" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'4\' height=\'4\' viewBox=\'0 0 4 4\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M1 3h1v1H1V3zm2-2h1v1H3V1z\' fill=\'%23000000\' fill-opacity=\'0.1\' fill-rule=\'evenodd\'/%3E%3C/svg%3E")' }}></div>
+                     {/* Marker texture - Fix quotes to avoid syntax errors */}
+                     <div className="absolute inset-0 bg-white opacity-20" style={{ backgroundImage: "url('data:image/svg+xml,%3Csvg width=%224%22 height=%224%22 viewBox=%220 0 4 4%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cpath d=%22M1 3h1v1H1V3zm2-2h1v1H3V1z%22 fill=%22%23000000%22 fill-opacity=%220.1%22 fill-rule=%22evenodd%22/%3E%3C/svg%3E')" }}></div>
                   </div>
                 </div>
 

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { AppSettings, Subscription, Transaction } from '../types';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/Card';
 import { Save, Download, Settings, Trash2, Globe, Moon, Sun } from 'lucide-react';
+import { useTheme } from '../context/ThemeContext';
 
 interface SettingsViewProps {
   settings: AppSettings;
@@ -24,19 +25,13 @@ const CURRENCIES = [
 export const SettingsView: React.FC<SettingsViewProps> = ({ settings, onSave, subscriptions, transactions, onClearData }) => {
   const [formData, setFormData] = useState<AppSettings>(settings);
   const [showConfirm, setShowConfirm] = useState(false);
+  const { theme, toggleTheme } = useTheme();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
       [name]: name === 'monthlyBudget' ? parseFloat(value) : value
-    }));
-  };
-
-  const toggleTheme = () => {
-    setFormData(prev => ({
-      ...prev,
-      theme: prev.theme === 'dark' ? 'light' : 'dark'
     }));
   };
 
@@ -87,7 +82,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ settings, onSave, su
         <CardContent>
           <form onSubmit={handleSave} className="space-y-4">
             
-            {/* Theme Toggle */}
+            {/* Theme Toggle controlled by Context */}
             <div className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-100 dark:border-slate-700 mb-4">
                <div>
                  <h4 className="font-medium text-slate-800 dark:text-white">Apariencia</h4>
@@ -96,10 +91,10 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ settings, onSave, su
                <button
                 type="button"
                 onClick={toggleTheme}
-                className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${formData.theme === 'dark' ? 'bg-slate-700' : 'bg-slate-200'}`}
+                className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${theme === 'dark' ? 'bg-slate-700' : 'bg-slate-200'}`}
                >
-                 <span className={`${formData.theme === 'dark' ? 'translate-x-7' : 'translate-x-1'} inline-block h-6 w-6 transform rounded-full bg-white transition-transform flex items-center justify-center shadow-sm`}>
-                    {formData.theme === 'dark' ? <Moon className="w-3 h-3 text-slate-800" /> : <Sun className="w-3 h-3 text-orange-400" />}
+                 <span className={`${theme === 'dark' ? 'translate-x-7' : 'translate-x-1'} inline-block h-6 w-6 transform rounded-full bg-white transition-transform flex items-center justify-center shadow-sm`}>
+                    {theme === 'dark' ? <Moon className="w-3 h-3 text-slate-800" /> : <Sun className="w-3 h-3 text-orange-400" />}
                  </span>
                </button>
             </div>

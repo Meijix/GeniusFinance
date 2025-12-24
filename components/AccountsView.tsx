@@ -129,8 +129,8 @@ export const AccountsView: React.FC<AccountsViewProps> = ({ accounts, settings, 
              whileHover={{ y: -5 }}
              className={`relative overflow-hidden rounded-2xl p-6 ${acc.color} shadow-sketch border-2 border-white/50 dark:border-slate-600/50`}
            >
-              {/* Card Texture */}
-              <div className="absolute inset-0 opacity-30 mix-blend-overlay" style={{backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'6\' height=\'6\' viewBox=\'0 0 6 6\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'%23000000\' fill-opacity=\'0.2\' fill-rule=\'evenodd\'%3E%3Cpath d=\'M5 0h1L0 6V5zM6 5v1H5z\'/%3E%3C/g%3E%3C/svg%3E")'}}></div>
+              {/* Card Texture - Fix quotes to avoid syntax errors */}
+              <div className="absolute inset-0 opacity-30 mix-blend-overlay" style={{backgroundImage: "url('data:image/svg+xml,%3Csvg width=%226%22 height=%226%22 viewBox=%220 0 6 6%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cg fill=%22%23000000%22 fill-opacity=%220.2%22 fill-rule=%22evenodd%22%3E%3Cpath d=%22M5 0h1L0 6V5zM6 5v1H5z%22/%3E%3C/g%3E%3C/svg%3E')"}}></div>
 
               <button 
                   onClick={() => onDeleteAccount(acc.id)}

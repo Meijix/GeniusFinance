@@ -7,7 +7,7 @@ import { TransactionsView } from './components/TransactionsView';
 import { SettingsView } from './components/SettingsView';
 import { SavingsGoalsView } from './components/SavingsGoalsView';
 import { DebtsView } from './components/DebtsView';
-import { AccountsView } from './components/AccountsView'; // Import
+import { AccountsView } from './components/AccountsView';
 import { Insights } from './components/Insights';
 import { QuickAdd } from './components/QuickAdd';
 import { Subscription, Transaction, AppSettings, SavingsGoal, Debt, Account, TransactionType } from './types';
@@ -17,13 +17,13 @@ import {
   loadSettings, saveSettings,
   loadGoals, saveGoals,
   loadDebts, saveDebts,
-  loadAccounts, saveAccounts // Import
+  loadAccounts, saveAccounts
 } from './services/storageService';
 import { motion, AnimatePresence } from 'framer-motion';
 
 enum View {
   DASHBOARD = 'Dashboard',
-  ACCOUNTS = 'Cuentas', // New View
+  ACCOUNTS = 'Cuentas',
   TRANSACTIONS = 'Movimientos',
   GOALS = 'Metas Ahorro',
   DEBTS = 'Deudas',
@@ -34,14 +34,23 @@ enum View {
 
 type ModalType = 'SUBSCRIPTION' | 'TRANSACTION' | null;
 
-const App: React.FC = () => {
+export const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<View>(View.DASHBOARD);
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [goals, setGoals] = useState<SavingsGoal[]>([]);
   const [debts, setDebts] = useState<Debt[]>([]);
-  const [accounts, setAccounts] = useState<Account[]>([]); // New State
-  const [settings, setSettings] = useState<AppSettings>({ monthlyBudget: 0, userName: 'Usuario', currencySymbol: '$', currencyCode: 'USD', theme: 'light' });
+  const [accounts, setAccounts] = useState<Account[]>([]);
+  
+  // Note: theme is now handled by ThemeContext, removed from initial settings state here to avoid conflicts,
+  // though we keep the type in AppSettings for compatibility if needed.
+  const [settings, setSettings] = useState<AppSettings>({ 
+    monthlyBudget: 0, 
+    userName: 'Usuario', 
+    currencySymbol: '$', 
+    currencyCode: 'USD', 
+    theme: 'light' 
+  });
   
   const [activeModal, setActiveModal] = useState<ModalType>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -52,17 +61,8 @@ const App: React.FC = () => {
     setSettings(loadSettings());
     setGoals(loadGoals());
     setDebts(loadDebts());
-    setAccounts(loadAccounts()); // Load
+    setAccounts(loadAccounts());
   }, []);
-
-  // Theme Effect
-  useEffect(() => {
-    if (settings.theme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, [settings.theme]);
 
   useEffect(() => {
     saveSubscriptions(subscriptions);
@@ -85,7 +85,7 @@ const App: React.FC = () => {
   }, [debts]);
 
   useEffect(() => {
-    saveAccounts(accounts); // Save
+    saveAccounts(accounts);
   }, [accounts]);
 
   const handleAddSubscription = (newSub: Omit<Subscription, 'id'>) => {
@@ -96,7 +96,6 @@ const App: React.FC = () => {
     setSubscriptions(prev => [...prev, sub]);
   };
 
-  // Enhanced handleAddTransaction to update Account Balances
   const handleAddTransaction = (newTrans: Omit<Transaction, 'id'>) => {
     const t: Transaction = {
       ...newTrans,
@@ -104,7 +103,6 @@ const App: React.FC = () => {
     };
     setTransactions(prev => [...prev, t]);
 
-    // If account is selected, update balance
     if (t.accountId) {
        setAccounts(prevAccounts => prevAccounts.map(acc => {
          if (acc.id === t.accountId) {
@@ -143,7 +141,6 @@ const App: React.FC = () => {
     setDebts(debts.map(d => d.id === updatedDebt.id ? updatedDebt : d));
   };
 
-  // Account Handlers
   const handleAddAccount = (newAcc: Omit<Account, 'id'>) => {
     const acc: Account = {
       ...newAcc,
@@ -180,6 +177,9 @@ const App: React.FC = () => {
     setAccounts([]);
     setSettings({ monthlyBudget: 0, userName: 'Usuario', currencySymbol: '$', currencyCode: 'USD', theme: 'light' });
     localStorage.clear(); 
+    // We don't clear the theme from localStorage here explicitly so the user isn't flashed, 
+    // or we could via the SettingsView if desired.
+    window.location.reload();
   };
 
   const NavItem = ({ view, icon: Icon }: { view: View; icon: any }) => (
@@ -301,7 +301,7 @@ const App: React.FC = () => {
                     subscriptions={subscriptions} 
                     transactions={transactions} 
                     settings={settings}
-                    debts={debts} // Pass debts for reminder board
+                    debts={debts} 
                  />
               )}
               
@@ -469,5 +469,3 @@ const App: React.FC = () => {
     </div>
   );
 };
-
-export default App;
